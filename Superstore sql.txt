@@ -1,0 +1,72 @@
+1. Daily Sales and Profit
+SELECT 
+    [Order Date],
+    ROUND(SUM(Sales), 2) AS Daily_Sales,
+    ROUND(SUM(Profit), 2) AS Daily_Profit
+FROM Superstore
+GROUP BY [Order Date]
+ORDER BY [Order Date];
+
+
+2. State-wise Sales and Profitability
+SELECT 
+    State,
+    ROUND(SUM(Sales), 2) AS Total_Sales,
+    ROUND(SUM(Profit), 2) AS Total_Profit,
+    ROUND(SUM(Profit)/SUM(Sales) * 100, 2) AS Profit_Margin_Percent
+FROM Superstore
+GROUP BY State
+ORDER BY Total_Sales DESC;
+
+
+3. Category and Sub-Category Performance
+SELECT 
+    Category,
+    [Sub-Category],
+    COUNT(DISTINCT [Order ID]) AS Total_Orders,
+    ROUND(SUM(Sales), 2) AS Total_Sales,
+    ROUND(SUM(Profit), 2) AS Total_Profit
+FROM Superstore
+GROUP BY Category, [Sub-Category]
+ORDER BY Total_Sales DESC;
+
+
+4. Top 10 Most Frequently Ordered Products
+SELECT 
+    [Product Name],
+    COUNT(*) AS Order_Count,
+    ROUND(SUM(Sales), 2) AS Total_Sales
+FROM Superstore
+GROUP BY [Product Name]
+ORDER BY Order_Count DESC
+LIMIT 10;
+ 
+
+5. Profit by Discount Range
+SELECT 
+    CASE 
+        WHEN Discount = 0 THEN 'No Discount'
+        WHEN Discount BETWEEN 0.01 AND 0.10 THEN '0-10%'
+        WHEN Discount BETWEEN 0.11 AND 0.30 THEN '11-30%'
+        WHEN Discount > 0.30 THEN '30%+'
+    END AS Discount_Range,
+    COUNT(*) AS Num_Orders,
+    ROUND(SUM(Sales), 2) AS Sales,
+    ROUND(SUM(Profit), 2) AS Profit
+FROM Superstore
+GROUP BY Discount_Range
+ORDER BY Profit DESC;
+
+
+6. Orders with Negative Profit
+SELECT 
+    [Order ID],
+    [Product Name],
+    Sales,
+    Profit,
+    Discount,
+    Category,
+    Region
+FROM Superstore
+WHERE Profit < 0
+ORDER BY Profit ASC;
